@@ -104,3 +104,12 @@ button.big{padding:14px;font-size:1.05rem}
 .foot{background:var(--rust);color:var(--champ);text-align:center;padding:28px 20px}
 .foot p{margin:0 0 6px}.foot a{color:var(--champ)}
 @media(max-width:760px){.nav nav{display:none}.home-gallery{padding-top:36px}.home-gallery .arch{border-width:4px}}
+.site,main{position:relative;overflow-x:clip}
+.vine{position:absolute;top:0;bottom:0;left:0;width:96px;background:url(/vine.svg) repeat-y top left;background-size:96px 524px;pointer-events:none;z-index:5}
+.vine.r{left:auto;right:0;transform:scaleX(-1)}
+.perks{display:flex;gap:14px;justify-content:center;margin:22px 0 4px;color:var(--champ)}
+.perks span{width:54px;height:54px;border-radius:50%;border:2px solid currentColor;display:grid;place-items:center}
+@media(max-width:600px){
+  .vine{width:56px;left:-10px;background-size:56px 305px}.vine.r{left:auto;right:-10px}
+  .wrap,.getting,.findband,.contact,.rsvp,.plate,.details{padding-left:40px;padding-right:40px}
+}

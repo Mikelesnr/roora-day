@@ -5,6 +5,8 @@ import RsvpForm from "./RsvpForm";
 import ContactForm from "@/components/ContactForm";
 import Getting from "@/components/Getting";
 import Chat from "./Chat";
+import Vines from "@/components/Vines";
+import Perks from "@/components/Perks";
 export const dynamic = "force-dynamic";
 
 const photo = (n: number, a: string, b: string) => ({
@@ -18,11 +20,13 @@ export default async function Invite({ params }: { params: { code: string } }) {
   const wa = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
   return (
     <main>
+      <Vines />
       <div className="stripe">{PALETTE.map(([n, c]) => <i key={n} style={{ background: c }} />)}</div>
       <section className="hero">
         <p className="small">Together with their families</p>
         <h1 className="names">{EVENT.groom}<span> and </span>{EVENT.bride}</h1>
         <p className="small">invite you to their {EVENT.title}</p>
+        <Perks />
       </section>
       <section className="arches">
         <div className="arch" style={photo(1, "#8A9A6B", "#4B5A2A")} />

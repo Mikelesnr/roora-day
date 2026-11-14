@@ -2,6 +2,8 @@ import { EVENT, PALETTE, directionsUrl } from "@/lib/event";
 import ContactForm from "@/components/ContactForm";
 import Getting from "@/components/Getting";
 import FindInvite from "@/components/FindInvite";
+import Vines from "@/components/Vines";
+import Perks from "@/components/Perks";
 
 const img = (f: string, a: string, b: string) => ({ backgroundImage: `url(/photos/${f}), linear-gradient(160deg, ${a}, ${b})` });
 
@@ -9,6 +11,7 @@ export default function Home() {
   const wa = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
   return (
     <div className="site">
+      <Vines />
       <header className="nav">
         <a className="logo" href="#top">P &amp; T</a>
         <nav>
@@ -23,6 +26,7 @@ export default function Home() {
           <h1 className="names">{EVENT.groom}<span> and </span>{EVENT.bride}</h1>
           <p className="lead">invite you to their {EVENT.title}</p>
           <p className="when">{EVENT.date}, {EVENT.time}<br />{EVENT.venue}, {EVENT.address}</p>
+          <Perks />
           <div className="cta">
             <a className="btn" href="#find">Find my invitation</a>
             <a className="btn ghost" href={directionsUrl()} target="_blank" rel="noreferrer">Get directions</a>

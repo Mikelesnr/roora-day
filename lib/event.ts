@@ -2,7 +2,7 @@ export const EVENT = {
   groom: "Prince",
   bride: "Tatenda",
   title: "Roora Day",
-  date: "Saturday, DATE TO BE CONFIRMED",
+  date: "Sunday, 13 December 2026",
   time: "TIME TO BE CONFIRMED",
   venue: "VENUE NAME",
   address: "Alexander Road, Highlands, Harare",
