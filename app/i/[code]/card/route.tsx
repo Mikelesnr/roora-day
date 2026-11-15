@@ -1,6 +1,6 @@
-import { getGuest, greeting, hasDb } from "@/lib/db";
-import { renderCard } from "@/lib/card";
-import { siteUrl } from "@/lib/event";
+import { getGuest, greeting, hasDb } from "../../../../lib/db";
+import { renderCard } from "../../../../lib/card";
+import { siteUrl } from "../../../../lib/event";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request, { params }: { params: { code: string } }) {
