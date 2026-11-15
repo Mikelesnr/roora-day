@@ -34,7 +34,7 @@ export default function RsvpForm(p: { code: string; max: number; status: string;
         <button disabled={busy} className="no" onClick={() => send("declined")}>Send regrets</button>
       </div>
       {msg && <p className="status" role="status">{msg}</p>}
-      {status === "accepted" && <a className="btn" href={`/i/${p.code}/card`} download>Save your invitation card</a>}
+      {status === "accepted" && <a className="btn" href={`/i/${p.code}/card`}>Save your invitation card</a>}
     </div>
   );
 }

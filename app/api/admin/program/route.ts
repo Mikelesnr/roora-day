@@ -7,7 +7,11 @@ const bad = (m: string, s = 400) => NextResponse.json({ error: m }, { status: s 
 
 export async function GET() {
   if (!isAdmin()) return bad("Not allowed", 401);
-  return NextResponse.json(await getProgram());
+  try {
+    return NextResponse.json(await getProgram());
+  } catch (e) {
+    return bad((e as Error).message + " (have you run the program part of supabase.sql?)", 500);
+  }
 }
 export async function POST(req: Request) {
   if (!isAdmin()) return bad("Not allowed", 401);
