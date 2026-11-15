@@ -28,7 +28,8 @@ export default function ProgramAdmin() {
 
   const load = useCallback(async () => {
     const r = await fetch("/api/admin/program");
-    if (r.ok) { const j = await r.json(); setItems(j.items); setFinalised(j.finalised); }
+    const j = await r.json();
+    if (r.ok) { setItems(j.items); setFinalised(j.finalised); setErr(""); } else setErr(j.error || "Could not load the program");
   }, []);
   useEffect(() => { load(); }, [load]);
 

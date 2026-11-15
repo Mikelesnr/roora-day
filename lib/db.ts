@@ -1,6 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
+// Next.js caches fetch() calls by default, which made guest status and the program look stale.
+// Every database call is sent with cache: "no-store" so it always reads live data.
 export const db = () =>
-  createClient(process.env.SUPABASE_URL!, (process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY)!, { auth: { persistSession: false } });
+  createClient(process.env.SUPABASE_URL!, (process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY)!, {
+    auth: { persistSession: false },
+    global: { fetch: (input, init) => fetch(input, { ...init, cache: "no-store" }) },
+  });
 export type Guest = {
   id: string; code: string; name: string; family_name: string | null; email: string | null; phone: string | null;
   max_party: number; status: "pending" | "accepted" | "declined"; attending: number; note: string | null;

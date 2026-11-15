@@ -19,7 +19,7 @@ export default function ProgramModal({ label = "View the program", className = "
   useEffect(() => {
     if (!open) return;
     setFailed(false);
-    fetch("/api/program", { cache: "no-store" }).then((r) => r.json()).then(setData).catch(() => setFailed(true));
+    fetch("/api/program", { cache: "no-store" }).then((r) => r.json()).then((j) => (j.error ? setFailed(true) : setData(j))).catch(() => setFailed(true));
     const esc = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", esc);
     document.body.style.overflow = "hidden";

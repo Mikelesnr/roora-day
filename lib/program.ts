@@ -22,5 +22,6 @@ export async function getProgram(): Promise<{ items: Item[]; finalised: boolean 
     d.from("program_items").select("*").order("sort_order"),
     d.from("settings").select("value").eq("key", "program_finalised").maybeSingle(),
   ]);
+  if (a.error) throw new Error(a.error.message);
   return { items: (a.data || []) as Item[], finalised: b.data?.value === "true" };
 }
