@@ -148,7 +148,7 @@ table.prog td b{display:block}table.prog td span{display:block;font-size:.95rem;
 code{background:var(--champ);padding:2px 8px;border-radius:3px;letter-spacing:.08em;font-weight:600}
 
 /* ---- nav: desktop polish ---- */
-html{scroll-padding-top:76px}
+html{scroll-padding-top:84px}
 @media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 .nav-links a,.linkbtn{position:relative}
 .nav-links a::after,.linkbtn::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;background:var(--burnt);transform:scaleX(0);transform-origin:left;transition:transform .3s}
@@ -163,8 +163,8 @@ html{scroll-padding-top:76px}
 .is-open .burger span:nth-child(3){top:22px;transform:rotate(-45deg)}
 .nav .logo{position:relative;z-index:3;transition:color .4s}
 .nav.is-open .logo{color:var(--champ)}
-.menu{position:fixed;inset:0;z-index:1;visibility:hidden;overflow:hidden;background:linear-gradient(160deg,var(--burnt) 0%,var(--rust) 58%,#6E2F14 100%);clip-path:circle(0% at calc(100% - 43px) 33px);transition:clip-path .75s cubic-bezier(.7,0,.2,1),visibility 0s .75s}
-.menu.open{visibility:visible;clip-path:circle(180% at calc(100% - 43px) 33px);transition:clip-path .95s cubic-bezier(.2,.8,.2,1),visibility 0s}
+.menu{position:fixed;inset:0;z-index:1;visibility:hidden;overflow:hidden;background:linear-gradient(160deg,var(--burnt) 0%,var(--rust) 58%,#6E2F14 100%);clip-path:circle(0% at calc(100% - 43px) 35px);transition:clip-path .75s cubic-bezier(.7,0,.2,1),visibility 0s .75s}
+.menu.open{visibility:visible;clip-path:circle(180% at calc(100% - 43px) 35px);transition:clip-path .95s cubic-bezier(.2,.8,.2,1),visibility 0s}
 .menu-stripe{position:absolute;left:0;right:0;top:0;height:10px;display:flex;transform:scaleX(0);transform-origin:left;transition:transform .4s}
 .menu-stripe i{flex:1}
 .menu.open .menu-stripe{transform:scaleX(1);transition:transform .9s cubic-bezier(.2,.8,.2,1) .35s}
@@ -202,3 +202,6 @@ html{scroll-padding-top:76px}
 }
 .nav.is-open ~ .chat-fab{display:none}
 .setup{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+
+.logo img{display:block;height:50px;width:auto;background:radial-gradient(circle closest-side at 50% 51%,#FDF8EE 96%,transparent 98%)}
+.hero-logo{display:block;margin:0 auto 20px;height:124px;width:auto;background:radial-gradient(circle closest-side at 50% 51%,#FDF8EE 96%,transparent 98%);filter:drop-shadow(0 4px 12px rgba(36,20,8,.35))}

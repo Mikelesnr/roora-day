@@ -15,7 +15,7 @@ function wrap(t: string, f: PDFFont, size: number, max: number) {
   return out;
 }
 
-export async function buildProgramPdf(items: Row[]): Promise<Uint8Array> {
+export async function buildProgramPdf(items: Row[], logo?: Uint8Array | null): Promise<Uint8Array> {
   const W = 595.28, H = 841.89, M = 56;
   const pdf = await PDFDocument.create();
   const serif = await pdf.embedFont(StandardFonts.TimesRomanBold);
@@ -26,8 +26,17 @@ export async function buildProgramPdf(items: Row[]): Promise<Uint8Array> {
   const center = (t: string, f: PDFFont, s: number, c: ReturnType<typeof hex>) => { const x = clean(t); page.drawText(x, { x: (W - f.widthOfTextAtSize(x, s)) / 2, y, size: s, font: f, color: c }); };
 
   stripe(); y = H - 72;
-  center("Together with their families", sans, 11, hex("#4B5A2A")); y -= 44;
-  center(`${EVENT.groom} and ${EVENT.bride}`, serif, 36, hex("#8E3F1B")); y -= 30;
+  let logoDrawn = false;
+  if (logo) {
+    try {
+      const lg = await pdf.embedPng(logo), lh = 72, lw = (lg.width * lh) / lg.height;
+      page.drawImage(lg, { x: (W - lw) / 2, y: H - 22 - lh, width: lw, height: lh });
+      logoDrawn = true;
+    } catch { /* fall back to a text line */ }
+  }
+  if (!logoDrawn) center("Together with their families", sans, 11, hex("#4B5A2A"));
+  y = H - 138;
+  center(`${EVENT.groom} and ${EVENT.bride}`, serif, 32, hex("#8E3F1B")); y -= 26;
   center(`${EVENT.title} Program`, serif, 20, hex("#4A2518")); y -= 24;
   center(EVENT.date, sans, 11.5, hex("#4A2518")); y -= 16;
   center(`${EVENT.venue}, ${EVENT.address}`, sans, 10.5, hex("#4A2518")); y -= 20;
