@@ -3,7 +3,7 @@ import { db, hasDb } from "@/lib/db";
 export async function POST(req: Request) {
   const b = await req.json();
   if (!hasDb()) return NextResponse.json({ ok: true, demo: true });
-  const { data: g } = await db().from("guests").select("id,max_party").eq("code", b.code).single();
+  const { data: g } = await db().from("guests").select("id,max_party").eq("code", String(b.code).toUpperCase()).single();
   if (!g) return NextResponse.json({ error: "Invitation not found" }, { status: 404 });
   const accepted = b.status === "accepted";
   const { error } = await db().from("guests").update({

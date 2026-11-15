@@ -1,17 +1,20 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { inviteText, phoneDigits } from "@/lib/message";
+import { inviteLink, inviteText, phoneDigits } from "@/lib/message";
 import type { Guest } from "@/lib/db";
+import ProgramAdmin from "@/components/ProgramAdmin";
 
 export default function Admin() {
   const [guests, setGuests] = useState<Guest[] | null>(null);
   const [pw, setPw] = useState("");
   const [err, setErr] = useState("");
+  const [note, setNote] = useState("");
+  const [setup, setSetup] = useState<Record<string, boolean>>({});
   const [form, setForm] = useState({ name: "", family_name: "", email: "", phone: "", max_party: 1 });
 
   const load = useCallback(async () => {
     const r = await fetch("/api/admin/guests");
-    if (r.ok) setGuests((await r.json()).guests); else setGuests(null);
+    if (r.ok) { const j = await r.json(); setGuests(j.guests); setSetup(j.setup || {}); } else setGuests(null);
   }, []);
   useEffect(() => { load(); }, [load]);
 
@@ -28,12 +31,17 @@ export default function Admin() {
     const r = await fetch("/api/admin/email", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id }) });
     setErr(r.ok ? "" : (await r.json()).error); load();
   }
+  const msg = (g: Guest) => inviteText(g.family_name || g.name, g.code, inviteLink(location.origin, g.code));
   async function whatsapp(g: Guest) {
-    const link = `${location.origin}/i/${g.code}`;
-    window.open(`https://wa.me/${phoneDigits(g.phone!)}?text=${encodeURIComponent(inviteText(g.family_name || g.name, link))}`, "_blank");
+    window.open(`https://wa.me/${phoneDigits(g.phone!)}?text=${encodeURIComponent(msg(g))}`, "_blank");
     await fetch("/api/admin/guests", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: g.id }) });
     load();
   }
+  async function copyMsg(g: Guest) {
+    await navigator.clipboard.writeText(msg(g));
+    setNote(`Message for ${g.family_name || g.name} copied. Paste it into SMS or any chat.`);
+  }
+  function sms(g: Guest) { window.location.href = `sms:+${phoneDigits(g.phone!)}?body=${encodeURIComponent(msg(g))}`; }
 
   if (!guests) return (
     <main className="plain"><h1 className="names">Guest list</h1>
@@ -50,6 +58,7 @@ export default function Admin() {
     <main className="admin">
       <h1 className="names">Guest list</h1>
       <div className="stats">{stats.map(([l, n]) => <div key={l}><b>{n}</b>{l}</div>)}</div>
+      <p className="setup">{Object.entries(setup).map(([k, v]) => <span key={k} className={`tag ${v ? "accepted" : "declined"}`}>{k}: {v ? "on" : "missing"}</span>)}</p>
       <div className="addrow">
         <input placeholder="Guest name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
         <input placeholder="Family label, e.g. The Moyo Family" value={form.family_name} onChange={(e) => setForm({ ...form, family_name: e.target.value })} />
@@ -59,23 +68,28 @@ export default function Admin() {
         <button className="yes" onClick={add}>Add guest</button>
       </div>
       {err && <p className="status">{err}</p>}
+      {note && <p className="status">{note}</p>}
       <div className="scroll"><table>
-        <thead><tr><th>Guest</th><th>Seats</th><th>Reply</th><th>Coming</th><th>Message</th><th>Send</th><th /></tr></thead>
+        <thead><tr><th>Guest</th><th>Code</th><th>Seats</th><th>Reply</th><th>Coming</th><th>Message</th><th>Send</th><th /></tr></thead>
         <tbody>{guests.map((g) => (
           <tr key={g.id}>
             <td>{g.family_name || g.name}<small>{g.family_name ? g.name : ""}</small></td>
+            <td><code>{g.code}</code></td>
             <td>{g.max_party}</td>
             <td><span className={`tag ${g.status}`}>{g.status}</span></td>
             <td>{g.attending || ""}</td>
             <td>{g.note}</td>
             <td className="acts">
               {g.phone && <button onClick={() => whatsapp(g)}>{g.whatsapp_at ? "WhatsApp again" : "WhatsApp"}</button>}
+              <button onClick={() => copyMsg(g)}>Copy message</button>
+              {g.phone && <button onClick={() => sms(g)}>SMS</button>}
               {g.email && <button onClick={() => email(g.id)}>{g.emailed_at ? "Email again" : "Email"}</button>}
-              <button onClick={() => navigator.clipboard.writeText(`${location.origin}/i/${g.code}`)}>Copy link</button>
+              <button onClick={() => navigator.clipboard.writeText(`${location.origin}/i/${g.code}`)}>Direct link</button>
             </td>
             <td><button onClick={() => remove(g.id)}>Remove</button></td>
           </tr>))}</tbody>
       </table></div>
+      <ProgramAdmin />
     </main>
   );
 }

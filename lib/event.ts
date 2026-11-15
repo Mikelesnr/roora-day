@@ -7,7 +7,7 @@ export const EVENT = {
   venue: "VENUE NAME",
   address: "Alexander Road, Highlands, Harare",
   dressCode: "Fall Garden Luncheon",
-  rsvpBy: "DATE TO BE CONFIRMED",
+  rsvpBy: "1 December 2026",
 };
 export const PALETTE = [
   ["Sage Green", "#8A9A6B"], ["Olive Green", "#4B5A2A"], ["Burnt Orange", "#C2571B"],

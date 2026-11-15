@@ -8,13 +8,13 @@ async function loadFont() {
 }
 async function loadPhoto(origin: string) {
   try {
-    const r = await fetch(`${origin}/photos/couple-2.jpg`);
+    const r = await fetch(`${origin}/photos/couple.jpg`);
     if (!r.ok) return null;
     return `data:${r.headers.get("content-type") || "image/jpeg"};base64,${Buffer.from(await r.arrayBuffer()).toString("base64")}`;
   } catch { return null; }
 }
 
-export async function renderCard(who: string, seats: number, w: number, h: number, origin: string, headers?: Record<string, string>) {
+export async function renderCard(who: string | null, seats: number, w: number, h: number, origin: string, headers?: Record<string, string>) {
   const [font, photo] = await Promise.all([loadFont(), loadPhoto(origin)]);
   const wide = w > h;
   const fam = font ? "Cormorant" : "sans-serif";
@@ -33,9 +33,9 @@ export async function renderCard(who: string, seats: number, w: number, h: numbe
   );
   const info = (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: wide ? "0 40px" : "56px 60px 0", flex: 1, justifyContent: wide ? "center" : "flex-start" }}>
-      <div style={{ display: "flex", fontSize: wide ? 24 : 30, color: "#4B5A2A", fontFamily: "sans-serif" }}>Reserved for</div>
-      <div style={{ display: "flex", fontSize: wide ? 64 : 92, color: "#8E3F1B", lineHeight: 1.1, margin: "6px 0 14px" }}>{who}</div>
-      <div style={{ display: "flex", fontSize: wide ? 24 : 32, fontFamily: "sans-serif" }}>{seats === 1 ? "One seat is held in your name" : `${seats} seats are held for your family`}</div>
+      <div style={{ display: "flex", fontSize: wide ? 24 : 30, color: "#4B5A2A", fontFamily: "sans-serif" }}>{who === null ? "Join us" : "Reserved for"}</div>
+      <div style={{ display: "flex", fontSize: wide ? 64 : 92, color: "#8E3F1B", lineHeight: 1.1, margin: "6px 0 14px" }}>{who === null ? "You are invited" : who}</div>
+      {who === null ? null : <div style={{ display: "flex", fontSize: wide ? 24 : 32, fontFamily: "sans-serif" }}>{seats === 1 ? "One seat is held in your name" : `${seats} seats are held for your family`}</div>}
       <div style={{ display: "flex", fontSize: wide ? 24 : 32, fontFamily: "sans-serif", marginTop: 22 }}>{`${EVENT.date}, ${EVENT.time}`}</div>
       <div style={{ display: "flex", fontSize: wide ? 24 : 32, fontFamily: "sans-serif", marginTop: 6 }}>{`${EVENT.venue}, ${EVENT.address}`}</div>
       <div style={{ display: "flex", fontSize: wide ? 22 : 30, fontFamily: "sans-serif", marginTop: 22, color: "#C2571B" }}>{`Dress code: ${EVENT.dressCode}`}</div>
