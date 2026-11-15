@@ -4,14 +4,12 @@ import { EVENT, PALETTE } from "@/lib/event";
 import RsvpForm from "./RsvpForm";
 import ContactForm from "@/components/ContactForm";
 import Getting from "@/components/Getting";
-import Chat from "./Chat";
+import Chat from "@/components/Chat";
 import Vines from "@/components/Vines";
 import Perks from "@/components/Perks";
+import Arches from "@/components/Arches";
+import ProgramModal from "@/components/ProgramModal";
 export const dynamic = "force-dynamic";
-
-const photo = (n: number, a: string, b: string) => ({
-  backgroundImage: `url(/photos/couple-${n}.jpg), linear-gradient(160deg, ${a}, ${b})`,
-});
 
 export default async function Invite({ params }: { params: { code: string } }) {
   const g = await getGuest(params.code);
@@ -28,16 +26,11 @@ export default async function Invite({ params }: { params: { code: string } }) {
         <p className="small">invite you to their {EVENT.title}</p>
         <Perks />
       </section>
-      <section className="arches">
-        <div className="arch" style={photo(1, "#8A9A6B", "#4B5A2A")} />
-        <div className="arch tall" style={photo(2, "#C2571B", "#8E3F1B")} />
-        <div className="arch" style={photo(3, "#D9A021", "#C2571B")} />
-      </section>
+      <Arches className="arches" />
       <section className="plate">
         <p className="small">Reserved for</p>
         <h2>{who}</h2>
         <p>{g.max_party === 1 ? "One seat is held in your name" : `${g.max_party} seats are held for your family`}</p>
-        <a className="btn" href={`/i/${g.code}/card`} download>Save your invitation card</a>
       </section>
       <section className="details">
         <div><h3>When</h3><p>{EVENT.date}</p><p>{EVENT.time}</p></div>
@@ -48,6 +41,7 @@ export default async function Invite({ params }: { params: { code: string } }) {
           <ul>{PALETTE.map(([n, c]) => <li key={n}><b style={{ background: c }} />{n}</li>)}</ul>
         </div>
       </section>
+      <section className="progbar"><ProgramModal label="View the program of the day" /></section>
       <Getting />
       <section className="rsvp">
         <h2>Will you join us?</h2>

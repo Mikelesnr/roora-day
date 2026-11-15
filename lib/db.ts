@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 export const db = () =>
-  createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
+  createClient(process.env.SUPABASE_URL!, (process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY)!, { auth: { persistSession: false } });
 export type Guest = {
   id: string; code: string; name: string; family_name: string | null; email: string | null; phone: string | null;
   max_party: number; status: "pending" | "accepted" | "declined"; attending: number; note: string | null;
@@ -15,7 +15,7 @@ const DEMO: Guest = {
 };
 // With no database configured, /i/demo shows a sample guest so you can preview the design.
 export async function getGuest(code: string): Promise<Guest | null> {
-  if (!hasDb()) return code === "demo" ? DEMO : null;
-  const { data } = await db().from("guests").select("*").eq("code", code).single();
+  if (!hasDb()) return code.toLowerCase() === "demo" ? DEMO : null;
+  const { data } = await db().from("guests").select("*").eq("code", code.trim().toUpperCase()).single();
   return (data as Guest) || null;
 }

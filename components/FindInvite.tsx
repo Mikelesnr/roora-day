@@ -1,15 +1,15 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-export default function FindInvite() {
-  const [code, setCode] = useState("");
+export default function FindInvite({ initialCode = "" }: { initialCode?: string }) {
+  const [code, setCode] = useState(initialCode);
   const router = useRouter();
-  const go = () => code.trim() && router.push(`/i/${code.trim().toLowerCase()}`);
+  const go = () => { const c = code.replace(/[^a-z0-9]/gi, "").toUpperCase(); if (c) router.push(`/i/${c}`); };
   return (
     <div className="form">
-      <label>Invitation code<input value={code} onChange={(e) => setCode(e.target.value)} onKeyDown={(e) => e.key === "Enter" && go()} placeholder="For example 3f9a1c07be" /></label>
+      <label>Invitation code<input value={code} onChange={(e) => setCode(e.target.value)} onKeyDown={(e) => e.key === "Enter" && go()} placeholder="For example K7MQ4P" /></label>
       <button className="yes big" onClick={go}>Open my invitation</button>
-      <p className="small">Your code is the last part of the link we sent you, or you can simply tap that link.</p>
+      <p className="small">Your code is in the WhatsApp message we sent you.</p>
     </div>
   );
 }

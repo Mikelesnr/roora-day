@@ -4,13 +4,20 @@ import { db } from "@/lib/db";
 import { isAdmin } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 const deny = () => NextResponse.json({ error: "Not allowed" }, { status: 401 });
-const newCode = () => randomBytes(5).toString("hex");
+const ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"; // no 0/O/1/I so codes are easy to read out and type
+const newCode = () => Array.from(randomBytes(6), (b) => ALPHABET[b % 32]).join("");
 
 export async function GET() {
   if (!isAdmin()) return deny();
   const { data, error } = await db().from("guests").select("*").order("created_at", { ascending: false });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ guests: data });
+  const setup = {
+    "Helper chat": !!process.env.GEMINI_API_KEY,
+    "Gmail": !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET && process.env.GOOGLE_REFRESH_TOKEN && process.env.GMAIL_SENDER),
+    "WhatsApp number": !!process.env.NEXT_PUBLIC_WHATSAPP_NUMBER,
+    "Site URL": !!process.env.NEXT_PUBLIC_SITE_URL,
+  };
+  return NextResponse.json({ guests: data, setup });
 }
 export async function POST(req: Request) {
   if (!isAdmin()) return deny();
