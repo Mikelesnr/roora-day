@@ -20,3 +20,11 @@ Run the program section of `supabase.sql` (or press "Load sample program" in the
 
 ## How invitations go out
 In `/admin` add each guest. Every guest gets a short code (for example K7MQ4P). The WhatsApp button opens a chat with the invitation message already written: a link to the home page code box (code filled in) plus the code itself. For guests without WhatsApp, press "Copy message" and paste it into SMS, or press "SMS" on a phone to open the messages app with the text ready. Guests open the link, press "Open my invitation", reply, and the "Save your invitation card" button appears only after they accept.
+
+## Updating an existing copy
+Unzipping a new version over an old project does not delete files that were removed. Delete these if they exist, otherwise they can clash with the new ones:
+- `app/i/[code]/card/` (the old image card; the PDF card now lives in `app/i/[code]/card.pdf/`)
+- `app/i/[code]/opengraph-image.tsx`
+- `app/i/[code]/Chat.tsx` and `app/i/[code]/ContactForm.tsx` (moved to `components/`)
+- `public/photos/couple-1.jpg`, `couple-2.jpg`, `couple-3.jpg`
+Then run `npm install` and restart `npm run dev`. Safest of all: unzip into a fresh folder and copy over only your `.env.local` and your photos.

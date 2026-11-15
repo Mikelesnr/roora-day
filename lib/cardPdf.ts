@@ -19,7 +19,7 @@ const arch = (x: number, y: number, w: number, h: number) => {
   ];
 };
 
-export async function buildCardPdf(o: { who: string; seats: number; photo: Uint8Array | null }): Promise<Uint8Array> {
+export async function buildCardPdf(o: { who: string; seats: number; photo: Uint8Array | null; logo?: Uint8Array | null }): Promise<Uint8Array> {
   const W = 419.53, H = 595.28;
   const pdf = await PDFDocument.create();
   const serif = await pdf.embedFont(StandardFonts.TimesRomanBold);
@@ -41,12 +41,20 @@ export async function buildCardPdf(o: { who: string; seats: number; photo: Uint8
   PALETTE.forEach(([, c], i) => page.drawRectangle({ x: i * sw, y: H - 10, width: sw, height: 10, color: hex(c) }));
   PALETTE.forEach(([, c], i) => page.drawRectangle({ x: i * sw, y: 0, width: sw, height: 6, color: hex(c) }));
 
-  y = H - 42; center("Together with their families", sans, 9.5, hex("#4B5A2A"));
-  y = H - 76; center(`${EVENT.groom} and ${EVENT.bride}`, serif, 27, hex("#8E3F1B"));
-  y = H - 96; center(`invite you to their ${EVENT.title}`, serifI, 12.5, hex("#4A2518"));
+  let logoDrawn = false;
+  if (o.logo) {
+    try {
+      const lg = await pdf.embedPng(o.logo), lh = 80, lw = (lg.width * lh) / lg.height;
+      page.drawImage(lg, { x: (W - lw) / 2, y: H - 18 - lh, width: lw, height: lh });
+      logoDrawn = true;
+    } catch { /* fall back to a text line */ }
+  }
+  if (!logoDrawn) { y = H - 44; center("Together with their families", sans, 9.5, hex("#4B5A2A")); }
+  y = H - 126; center(`${EVENT.groom} and ${EVENT.bride}`, serif, 27, hex("#8E3F1B"));
+  y = H - 144; center(`invite you to their ${EVENT.title}`, serifI, 12.5, hex("#4A2518"));
 
   // framed arch photo
-  const aw = 170, ah = 215, ax = (W - aw) / 2, ay = H - 112 - ah, inset = 9;
+  const aw = 140, ah = 175, ax = (W - aw) / 2, ay = H - 158 - ah, inset = 9;
   fillArch(ax, ay, aw, ah, hex("#D9A021"));
   const bx = ax + inset, by = ay + inset, bw = aw - 2 * inset, bh = ah - 2 * inset;
   page.pushOperators(pushGraphicsState(), ...arch(bx, by, bw, bh), clip(), endPath());

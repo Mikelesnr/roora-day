@@ -21,6 +21,7 @@ export default async function Invite({ params }: { params: { code: string } }) {
       <Vines />
       <div className="stripe">{PALETTE.map(([n, c]) => <i key={n} style={{ background: c }} />)}</div>
       <section className="hero">
+        <img className="hero-logo" src="/logo.png" alt="Prince and Tatenda, Roora Day 2026" width={121} height={124} />
         <p className="small">Together with their families</p>
         <h1 className="names">{EVENT.groom}<span> and </span>{EVENT.bride}</h1>
         <p className="small">invite you to their {EVENT.title}</p>

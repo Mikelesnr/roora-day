@@ -25,7 +25,9 @@ export default function SiteNav() {
 
   return (
     <header className={`nav${open ? " is-open" : ""}`}>
-      <a className="logo" href="#top" onClick={close}>P &amp; T</a>
+      <a className="logo" href="#top" onClick={close} aria-label="Prince and Tatenda, Roora Day 2026">
+        <img src="/logo.png" alt="" width={49} height={50} />
+      </a>
       <nav className="nav-links" aria-label="Main">
         <a href="#day">The day</a>
         <ProgramModal label="Program" className="linkbtn" />
