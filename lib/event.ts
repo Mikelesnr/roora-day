@@ -3,9 +3,9 @@ export const EVENT = {
   bride: "Tatenda",
   title: "Roora Day",
   date: "Sunday, 13 December 2026",
-  time: "TIME TO BE CONFIRMED",
-  venue: "VENUE NAME",
-  address: "Alexander Road, Highlands, Harare",
+  time: "11:30 AM",
+  venue: "Family Home",
+  address: "3 Alexander Road, Highlands, Harare",
   dressCode: "Fall Garden Luncheon",
   rsvpBy: "1 December 2026",
 };
