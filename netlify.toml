@@ -1,3 +1,6 @@
 [build]
   command = "npm run build"
   publish = ".next"
+
+[secrets_scanning]
+  omit_keys = ["NEXT_PUBLIC_SITE_URL"]
